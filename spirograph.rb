@@ -3,11 +3,8 @@ require 'launchy'
 require 'matrix'
 include Math
 
-
 class Spirograph
 
-  
-  
   def pattern(v_R, v_r, v_p, v_nRotations, s_color)
     puts "v_R is the radius of the outer fixed circle: #{v_R}"
     puts "v_r is the radius of the inner moving circle: #{v_r}"
@@ -43,8 +40,6 @@ class Spirograph
     end
     # application doesn't work...had to set file to open with chrome in osx
     Launchy.open( path, :application => 'Google Chrome.app' ) 
-    
-
   end
 end
 
