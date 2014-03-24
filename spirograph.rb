@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'launchy'
 require 'matrix'
 include Math
+require './test'
 
 class Spirograph
 
@@ -13,17 +14,62 @@ class Spirograph
     puts "s_color is the color: #{s_color}"
 
     range = []
-    s = 0.05
+    s = 0.05 # step
     points = []
+    angle = []
+    degree_array = []
+    
 
     (0..(2 * PI * v_nRotations)).step(s) { |x| range << x.round(2) }
     
     range.each do |t|
       x = (v_R + v_r) * cos(t) + v_p * cos((v_R + v_r) * t / v_r)
 	    y = (v_R + v_r) * sin(t) + v_p * sin((v_R + v_r) * t / v_r)
-	    #puts "coords (#{x.to_i}, #{y.to_i})"
+	    #puts "cartesian coords (#{x.to_i}, #{y.to_i})"
       points << [ x.to_i, y.to_i ]
     end
+    
+    
+    ## this is an array of a starting point and a target point
+    target_path = points.inject([]) do |result, element|
+
+                  last_index = points.index(element)
+                  last = points[last_index - 1]
+
+                    if element == points[0]
+                      # only the starting point
+                    elsif element == points[1]
+                      result << [points[0], element] ## this is the first pair
+                    else
+                      result << [last, element]
+                    end
+                  result
+                  end
+
+    array = target_path.inject([]) do |result, element|
+              result << {:current_point => element[0], :target_point => element[1]}
+            end
+           
+    array.each do |arr|
+      vector_x = arr[:target_point][0] - arr[:current_point][0]
+      vector_y = arr[:target_point][1] - arr[:current_point][1]
+      
+      #length = sqrt((vector_x ** 2) + (vector_y ** 2)).round(0)
+      radians = atan2(vector_y, vector_x).round(2)  
+      degrees = (radians * ( 180 / PI )).round(0)
+
+      if degrees >= 0 && degrees <= 180 
+        (radians * ( 180 / PI )).round(0)
+      else
+        degrees = 180 + ( 180 - degrees.abs )
+      end
+
+      degree_array << degrees ## this is the degrees for the vectors
+    
+    end
+
+    p degree_array
+    
 
     output = Nokogiri::XML::Builder.new do |doc|
         doc.svg xmlns:"http://www.w3.org/2000/svg", viewBox:"-250 -250 500 500" do
@@ -33,17 +79,22 @@ class Spirograph
       end
     end
 
-    path = File.dirname(__FILE__) + "/image.svg"
+    path = "#{Dir.pwd}/image.svg"
 
     File.open(path, 'w+') do |file|
        file << output.to_xml
     end
+
     # application doesn't work...had to set file to open with chrome in osx
-    Launchy.open( path, :application => 'Google Chrome.app' ) 
+    #Launchy.open( path, :application => 'Google Chrome.app' ) 
+    Launchy.open( path ) 
   end
 end
 
 s = Spirograph.new
-#s.pattern(60, -15, 10, 1, :red)
+s.pattern(60, -15, 10, 100, :red) #diamond
 #s.pattern(100, -10, 20, 100, :blue)
-s.pattern(75, -30, 25, 100, :purple) #star
+#s.pattern(75, -30, 25, 100, :purple) #star
+
+#length = pythag(3,3,-3,3).round(2)
+
