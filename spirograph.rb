@@ -14,7 +14,7 @@ class Spirograph
     puts "s_color is the color: #{s_color}"
 
     range = []
-    s = 0.05 # step
+    s = 4 # step
     points = []
     angle = []
     degree_array = []
