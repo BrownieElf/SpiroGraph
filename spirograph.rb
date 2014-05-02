@@ -2,7 +2,7 @@ require 'nokogiri'
 require 'launchy'
 require 'matrix'
 include Math
-require './test'
+#require './test'
 
 class Spirograph
 

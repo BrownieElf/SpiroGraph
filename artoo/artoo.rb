@@ -1,6 +1,6 @@
 require 'artoo'
 
-connection :sphero, :adaptor => :sphero, :port => '/dev/tty.Sphero-GPO-AMP-SPP-11'
+connection :sphero, :adaptor => :sphero, :port => '/dev/tty.Sphero-GPO-AMP-SPP'
 
 device :sphero, :driver => :sphero
 
