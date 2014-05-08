@@ -1,5 +1,9 @@
 source 'https://rubygems.org'
 
+gem 'nokogiri'
+gem 'launchy'
+gem 'matrix'
+
 #gem 'artoo', '1.6.1'
 #gem 'artoo-sphero', '1.3.0'
 
